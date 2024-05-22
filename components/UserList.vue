@@ -63,15 +63,23 @@ interface User {
 const users = ref<User[]>([]);
 const page = ref<number>(1);
 
-const fetchUsers = async () => {
-  const res = await fetch("https://dummyjson.com/users");
-  const data = await res.json();
-  if (data.users && data.users.length) users.value = data.users;
-};
 
-onMounted(() => {
-  fetchUsers();
+// Fetch data on server-side before rendering
+onMounted(async () => {
+  if (users.value.length === 0) {
+    await fetchUsers();
+  }
 });
+
+const fetchUsers = async () => {
+  try {
+    const res = await fetch("https://dummyjson.com/users");
+    const data = await res.json();
+    if (data.users && data.users.length) users.value = data.users;
+  } catch (error) {
+    console.error('Error fetching users:', error);
+  }
+};
 
 const handlePageChange = (pageNumber: number): void => {
   if (

@@ -55,6 +55,14 @@
   
   const user = ref<User | null>(null);
   
+  
+  // Fetch data on server-side before rendering
+  onMounted(async () => {
+    if (user.value === null) {
+      await fetchData();
+    }
+  });
+
   const fetchData = async () => {
     try {
       const response = await fetch(`https://dummyjson.com/users/${route.params.id}`);
@@ -72,8 +80,6 @@
     }
   };
   
-  onMounted(fetchData);
-  
   const toggleSave = (user: User) => {
     if (userStore.isUserSaved(user.id)) {
       userStore.deleteUser(user.id);
@@ -84,4 +90,7 @@
   
   const isUserSaved = (userId: number) => userStore.isUserSaved(userId);
   </script>
+  
+
+
   

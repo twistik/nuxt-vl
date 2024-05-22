@@ -64,7 +64,6 @@ const users = ref<User[]>([]);
 const page = ref<number>(1);
 
 
-// Fetch data on server-side before rendering
 onMounted(async () => {
   if (users.value.length === 0) {
     await fetchUsers();
@@ -79,7 +78,8 @@ const fetchUsers = async () => {
   } catch (error) {
     console.error('Error fetching users:', error);
   }
-};
+}
+
 
 const handlePageChange = (pageNumber: number): void => {
   if (
